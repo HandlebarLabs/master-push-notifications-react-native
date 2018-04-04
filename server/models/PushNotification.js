@@ -1,4 +1,5 @@
 const Expo = require("expo-server-sdk");
+const moment = require("moment");
 const db = require("../db");
 
 const dbKey = "pushNotifications";
@@ -24,12 +25,38 @@ const addPushToken = ({ token, platform, timezoneOffset }) => {
     });
 };
 
+const getTimeRange = () => {
+  const currentUTC = moment().utc();
+  const allOffsets = [];
+  for (let i = -12; i <= 14; i++) {
+    allOffsets.push(i);
+  }
+
+  const validOffsets = allOffsets.filter(o => {
+    const timezoneTime = moment()
+      .utc()
+      .hours(currentUTC.hours() + o);
+    const timezoneHours = timezoneTime.hours();
+
+    if (timezoneHours >= 8 && timezoneHours <= 22) {
+      return true;
+    }
+    return false;
+  });
+
+  return [
+    validOffsets[0] * -60,
+    validOffsets[validOffsets.length - 1] * -60
+  ].sort();
+};
+
 const sendNewNotificationToAll = notification => {
   const { questions, nextQuestionTime } = notification.data;
   const expo = new Expo();
 
   return db
     .table(dbKey)
+    .whereBetween("timezoneOffset", getTimeRange())
     .then(docs => {
       const messages = [];
       const notificationReceivers = [];
