@@ -3,7 +3,7 @@ server-capturing-tokens
 server-storing-push-tokens
 server-sending-bulk-messages
 push-requesting-permissions
-push-displaying notification
+push-displaying-notification
 push-updating-badge
 push-preload-content
 push-notification-history
