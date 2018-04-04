@@ -28,7 +28,7 @@ class Welcome extends React.Component {
       <Container>
         <Card>
           <H1>Trivia!</H1>
-          <P>Free, twice-daily challenges of random knowledge</P>
+          <P>Every hour on the hour. Three new trivia questions to test your knowledge.</P>
           <View style={{ flex: 1, justifyContent: "flex-end" }}>
             <TextInput
               placeholder="Choose a username..."
