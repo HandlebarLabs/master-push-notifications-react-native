@@ -36,7 +36,11 @@ const sendNewNotificationToAll = ({ questions, nextQuestionTime }) => {
           to: doc.token,
           sound: "default",
           body: questions[0].question,
-          badge: questions.length
+          badge: questions.length,
+          data: {
+            questions,
+            nextQuestionTime
+          }
         });
       });
 

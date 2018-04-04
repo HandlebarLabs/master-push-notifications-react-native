@@ -1,3 +1,5 @@
+import React from "react";
+import { View, AppState } from "react-native";
 import { Permissions, Notifications } from "expo";
 
 export const pushNotificationsEnabled = async () => {
@@ -34,3 +36,39 @@ export const registerForPushNotifications = async () => {
 };
 
 export const setBadgeNumber = (number = 0) => Notifications.setBadgeNumberAsync(number);
+
+export class PushNotificationManager extends React.Component {
+  static defaultProps = {
+    onPushNotificationSelected: () => null,
+  };
+  componentDidMount() {
+    setBadgeNumber(0);
+
+    AppState.addEventListener("change", this.handleAppStateChange);
+    this.notificationSubscription = Notifications.addListener(this.handlePushNotification);
+  }
+
+  componentWillUnmount() {
+    this.notificationSubscription.remove();
+    AppState.removeEventListener("change", this.handleAppStateChange);
+  }
+
+  handleAppStateChange = (nextAppState) => {
+    if (nextAppState === "active") {
+      setBadgeNumber(0);
+    }
+  };
+
+  handlePushNotification = ({ data, origin }) => {
+    if (origin === "selected") {
+      // User opened app via push
+      this.props.onPushNotificationSelected(data);
+    } else if (origin === "received") {
+      // App was open when notification was received
+    }
+  };
+
+  render() {
+    return <View style={{ flex: 1 }}>{this.props.children}</View>;
+  }
+}
