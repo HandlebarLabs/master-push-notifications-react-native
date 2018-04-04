@@ -5,6 +5,7 @@ import Question from "./screens/Question";
 import Waiting from "./screens/Waiting";
 import Welcome from "./screens/Welcome";
 import EnablePush from "./screens/EnablePush";
+import NotificationHistory from "./screens/NotificationHistory";
 
 import Navigator from "./components/Navigator";
 import Container from "./components/Container";
@@ -45,6 +46,7 @@ class App extends React.Component {
             Question: { component: Question },
             Waiting: { component: Waiting },
             EnablePush: { component: EnablePush },
+            NotificationHistory: { component: NotificationHistory },
           }}
         />
       </Container>

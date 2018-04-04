@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 
 const Question = require("./models/Question");
 const PushNotification = require("./models/PushNotification");
+const NotificationReceiver = require("./models/NotificationReceiver");
 
 /*
  * Express Bootstrap
@@ -41,6 +42,14 @@ app.put("/push/add-token", (req, res) => {
     timezoneOffset: req.body.timezoneOffset
   })
     .then(() => formatResponse(res, "success"))
+    .catch(error => formatResponse(res, "error", error));
+});
+
+app.get("/push/history/:token", (req, res) => {
+  return NotificationReceiver.getHistory(req.params.token)
+    .then(history => {
+      formatResponse(res, "success", history);
+    })
     .catch(error => formatResponse(res, "error", error));
 });
 

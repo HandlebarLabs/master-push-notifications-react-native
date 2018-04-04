@@ -1,10 +1,10 @@
 import React from "react";
 import moment from "moment";
-import { View } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 
 import Container from "../components/Container";
 import Card from "../components/Card";
-import { H1, H2 } from "../components/Text";
+import { H1, H2, P } from "../components/Text";
 import { SecondaryButton } from "../components/Button";
 import Stats from "../components/Stats";
 
@@ -15,6 +15,10 @@ class Waiting extends React.Component {
   handleLogout = () => {
     this.props.logout();
     this.props.goTo("Welcome");
+  };
+
+  handleHistoryPress = () => {
+    this.props.goTo("NotificationHistory", {}, "vertical");
   };
 
   render() {
@@ -32,6 +36,11 @@ class Waiting extends React.Component {
             correct={this.props.correctAnswered}
             total={this.props.totalAnswered}
           />
+          <TouchableOpacity onPress={this.handleHistoryPress}>
+            <P bold center>
+              Notification History
+            </P>
+          </TouchableOpacity>
         </Card>
         <View>
           <SecondaryButton border={false} onPress={this.handleLogout}>

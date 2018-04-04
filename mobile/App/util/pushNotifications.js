@@ -2,6 +2,8 @@ import React from "react";
 import { View, AppState } from "react-native";
 import { Permissions, Notifications } from "expo";
 
+export const getPushToken = () => Notifications.getExpoPushTokenAsync();
+
 export const pushNotificationsEnabled = async () => {
   const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
   let finalStatus = existingStatus;

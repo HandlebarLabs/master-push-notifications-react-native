@@ -2,7 +2,7 @@ import React from "react";
 import { AsyncStorage, Platform } from "react-native";
 
 import { ENDPOINT } from "./api";
-import { registerForPushNotifications } from "./pushNotifications";
+import { registerForPushNotifications, getPushToken } from "./pushNotifications";
 
 const defaultState = {
   ready: false,
@@ -12,6 +12,7 @@ const defaultState = {
   correctAnswered: 0,
   answers: {},
   pushEnabled: false,
+  notificationHistory: [],
 };
 
 const UserContext = React.createContext(defaultState);
@@ -42,6 +43,17 @@ export class Provider extends React.Component {
   setUsername = (username = null) => {
     this.setState({ username });
   };
+
+  getNotificationHistory = () =>
+    getPushToken()
+      .then(token => fetch(`${ENDPOINT}/push/history/${token}`))
+      .then(res => res.json())
+      .then(({ data }) => {
+        data.sort((a, b) => new Date(a.createdAt) > new Date(b.createdAt));
+        this.setState({
+          notificationHistory: data,
+        });
+      });
 
   answerQuestion = (question, answer) => {
     this.setState(state => ({
@@ -91,6 +103,7 @@ export class Provider extends React.Component {
           setUsername: this.setUsername,
           answerQuestion: this.answerQuestion,
           enablePushNotifications: this.enablePushNotifications,
+          getNotificationHistory: this.getNotificationHistory,
         }}
       >
         {this.props.children}

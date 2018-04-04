@@ -24,14 +24,22 @@ const addPushToken = ({ token, platform, timezoneOffset }) => {
     });
 };
 
-const sendNewNotificationToAll = ({ questions, nextQuestionTime }) => {
+const sendNewNotificationToAll = notification => {
+  const { questions, nextQuestionTime } = notification.data;
   const expo = new Expo();
 
   return db
     .table(dbKey)
     .then(docs => {
       const messages = [];
+      const notificationReceivers = [];
+
       docs.forEach(doc => {
+        notificationReceivers.push({
+          pushNotificationId: doc._id,
+          notificationId: notification._id
+        });
+
         messages.push({
           to: doc.token,
           sound: "default",
@@ -45,17 +53,26 @@ const sendNewNotificationToAll = ({ questions, nextQuestionTime }) => {
       });
 
       return {
-        messages
+        messages,
+        notificationReceivers
       };
     })
-    .then(({ messages }) => {
+    .then(({ messages, notificationReceivers }) => {
       const messageChunks = expo.chunkPushNotifications(messages);
 
       const expoRequests = messageChunks.map(chunk => {
         return expo.sendPushNotificationsAsync(chunk);
       });
 
-      return Promise.all(expoRequests);
+      return { expoRequests, notificationReceivers };
+    })
+    .then(({ expoRequests, notificationReceivers }) => {
+      const NotificationReceivers = require("./NotificationReceiver");
+
+      return Promise.all([
+        NotificationReceivers.createMany(notificationReceivers),
+        ...expoRequests
+      ]);
     });
 };
 
