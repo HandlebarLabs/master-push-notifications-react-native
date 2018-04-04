@@ -79,6 +79,10 @@ class WrappedApp extends React.Component {
         )
         .then(() => this.setState({ goToRoute: "Question" }));
     }
+
+    if (data.target === "stats") {
+      this.setState({ goToRoute: "Waiting" });
+    }
   };
 
   render() {
