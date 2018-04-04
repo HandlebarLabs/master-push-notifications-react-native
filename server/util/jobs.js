@@ -20,15 +20,15 @@ const createNewQuestionJob = () => {
   return job;
 };
 
-// const njob = schedule.scheduleJob("0 * * * *", () => null);
-// Question.setNewQuestion().then(questions => {
-//   return Notification.createNotification({
-//     questions,
-//     nextQuestionTime: njob.nextInvocation()
-//   }).then(notification => {
-//     PushNotification.sendNewNotificationToAll(notification);
-//   });
-// });
+const njob = schedule.scheduleJob("0 * * * *", () => null);
+Question.setNewQuestion().then(questions => {
+  return Notification.createNotification({
+    questions,
+    nextQuestionTime: njob.nextInvocation()
+  }).then(notification => {
+    PushNotification.sendNewNotificationToAll(notification);
+  });
+});
 
 module.exports = {
   createNewQuestionJob

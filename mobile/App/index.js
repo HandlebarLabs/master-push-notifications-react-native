@@ -24,6 +24,12 @@ class App extends React.Component {
     loadFonts().then(() => this.setState({ fontsReady: true }));
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.goToRoute && this.props.goToRoute !== prevProps.goToRoute) {
+      this.navigator.goTo(this.props.goToRoute);
+    }
+  }
+
   render() {
     if (!this.props.user.ready || !this.props.question.ready || !this.state.fontsReady) {
       return (
@@ -55,24 +61,33 @@ class App extends React.Component {
 }
 
 class WrappedApp extends React.Component {
+  state = {
+    goToRoute: null,
+  };
+
   handlePushNotification = (data) => {
     if (data.questions && data.nextQuestionTime) {
-      this.props.question.setQuestions(
-        {
-          data: {
-            questions: data.questions,
-            nextQuestionTime: data.nextQuestionTime,
+      this.props.question
+        .setQuestions(
+          {
+            data: {
+              questions: data.questions,
+              nextQuestionTime: data.nextQuestionTime,
+            },
           },
-        },
-        true,
-      );
+          true,
+        )
+        .then(() => this.setState({ goToRoute: "Question" }));
     }
   };
 
   render() {
     return (
-      <PushNotificationManager onPushNotificationSelected={this.handlePushNotification}>
-        <App {...this.props} />
+      <PushNotificationManager
+        onPushNotificationSelected={this.handlePushNotification}
+        onPushNotificationReceived={this.handlePushNotification}
+      >
+        <App goToRoute={this.state.goToRoute} {...this.props} />
       </PushNotificationManager>
     );
   }
