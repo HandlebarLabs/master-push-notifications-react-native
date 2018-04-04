@@ -1,0 +1,56 @@
+import React from "react";
+import { View } from "react-native";
+
+import Container from "../components/Container";
+import Card from "../components/Card";
+import { H1, P } from "../components/Text";
+import { PrimaryButton } from "../components/Button";
+import TextInput from "../components/TextInput";
+
+import * as UserData from "../util/UserData";
+
+class Welcome extends React.Component {
+  state = {
+    username: "",
+  };
+
+  handleNext = () => {
+    if (this.state.username.length > 0) {
+      this.props.completeOnboarding();
+      this.props.setUsername(this.state.username);
+      this.props.goTo("Question");
+    } else {
+      alert("Username is required.");
+    }
+  };
+
+  render() {
+    return (
+      <Container>
+        <Card>
+          <H1>Trivia!</H1>
+          <P>Free, twice-daily challenges of random knowledge</P>
+          <View style={{ flex: 1, justifyContent: "flex-end" }}>
+            <TextInput
+              placeholder="Choose a username..."
+              autoCapitalize="none"
+              autoCorrect={false}
+              onChangeText={username => this.setState({ username })}
+              returnKeyType="next"
+              onSubmitEditing={this.handleNext}
+            />
+          </View>
+        </Card>
+        <PrimaryButton onPress={this.handleNext}>Join!</PrimaryButton>
+      </Container>
+    );
+  }
+}
+
+export default props => (
+  <UserData.Consumer>
+    {({ setUsername, completeOnboarding }) => (
+      <Welcome {...props} setUsername={setUsername} completeOnboarding={completeOnboarding} />
+    )}
+  </UserData.Consumer>
+);
