@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const Question = require("./models/Question");
+const PushNotification = require("./models/PushNotification");
 
 /*
  * Express Bootstrap
@@ -34,13 +35,13 @@ app.put("/push/add-token", (req, res) => {
     timezoneOffset: req.body.timezoneOffset
   };
 
-  console.log(data);
-  return (
-    Promise.resolve()
-      // return Promise.reject(new Error("test"))
-      .then(() => formatResponse(res, "success"))
-      .catch(error => formatResponse(res, "error", error))
-  );
+  return PushNotification.addPushToken({
+    token: req.body.pushToken,
+    platform: req.body.platform,
+    timezoneOffset: req.body.timezoneOffset
+  })
+    .then(() => formatResponse(res, "success"))
+    .catch(error => formatResponse(res, "error", error));
 });
 
 app.get("/questions/next", (req, res) => {

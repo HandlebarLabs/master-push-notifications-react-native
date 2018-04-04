@@ -12,6 +12,15 @@ exports.up = function(knex, Promise) {
     })
   );
 
+  chain.push(
+    knex.schema.createTable("pushNotifications", table => {
+      table.increments("_id");
+      table.text("token");
+      table.string("platform");
+      table.integer("timezoneOffset").defaultTo(240); // Default to EST
+    })
+  );
+
   return Promise.all(chain);
 };
 
