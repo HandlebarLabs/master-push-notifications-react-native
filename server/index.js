@@ -27,6 +27,22 @@ app.get("/", (req, res) => {
   res.send("Hello to the Trivia API!");
 });
 
+app.put("/push/add-token", (req, res) => {
+  const data = {
+    token: req.body.pushToken,
+    platform: req.body.platform,
+    timezoneOffset: req.body.timezoneOffset
+  };
+
+  console.log(data);
+  return (
+    Promise.resolve()
+      // return Promise.reject(new Error("test"))
+      .then(() => formatResponse(res, "success"))
+      .catch(error => formatResponse(res, "error", error))
+  );
+});
+
 app.get("/questions/next", (req, res) => {
   return Question.getNextQuestions()
     .then(questions => {
