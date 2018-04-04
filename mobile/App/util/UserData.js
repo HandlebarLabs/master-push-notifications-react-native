@@ -1,5 +1,8 @@
 import React from "react";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, Platform } from "react-native";
+
+import { ENDPOINT } from "./api";
+import { registerForPushNotifications } from "./pushNotifications";
 
 const defaultState = {
   ready: false,
@@ -8,6 +11,7 @@ const defaultState = {
   totalAnswered: 0,
   correctAnswered: 0,
   answers: {},
+  pushEnabled: false,
 };
 
 const UserContext = React.createContext(defaultState);
@@ -56,6 +60,27 @@ export class Provider extends React.Component {
     this.setState({ ...defaultState, ready: true });
   };
 
+  enablePushNotifications = () =>
+    registerForPushNotifications().then((token) => {
+      if (token) {
+        this.setState({ pushEnabled: true });
+        return fetch(`${ENDPOINT}/push/add-token`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            pushToken: token,
+            platform: Platform.OS,
+            timezoneOffset: new Date().getTimezoneOffset(),
+          }),
+        });
+      }
+
+      this.setState({ pushEnabled: false });
+      return Promise.resolve();
+    });
+
   render() {
     return (
       <UserContext.Provider
@@ -65,6 +90,7 @@ export class Provider extends React.Component {
           completeOnboarding: this.completeOnboarding,
           setUsername: this.setUsername,
           answerQuestion: this.answerQuestion,
+          enablePushNotifications: this.enablePushNotifications,
         }}
       >
         {this.props.children}
