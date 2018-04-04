@@ -24,7 +24,38 @@ const addPushToken = ({ token, platform, timezoneOffset }) => {
     });
 };
 
+const sendNewNotificationToAll = ({ questions, nextQuestionTime }) => {
+  const expo = new Expo();
+
+  return db
+    .table(dbKey)
+    .then(docs => {
+      const messages = [];
+      docs.forEach(doc => {
+        messages.push({
+          to: doc.token,
+          sound: "default",
+          body: questions[0].question
+        });
+      });
+
+      return {
+        messages
+      };
+    })
+    .then(({ messages }) => {
+      const messageChunks = expo.chunkPushNotifications(messages);
+
+      const expoRequests = messageChunks.map(chunk => {
+        return expo.sendPushNotificationsAsync(chunk);
+      });
+
+      return Promise.all(expoRequests);
+    });
+};
+
 module.exports = {
   dbKey,
-  addPushToken
+  addPushToken,
+  sendNewNotificationToAll
 };
