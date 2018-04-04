@@ -32,3 +32,5 @@ export const registerForPushNotifications = async () => {
   // Get the token that uniquely identifies this device
   return Notifications.getExpoPushTokenAsync();
 };
+
+export const setBadgeNumber = (number = 0) => Notifications.setBadgeNumberAsync(number);
