@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
   res.send("Hello to the Trivia API!");
 });
 
-app.put("/push/add-token", (req, res) => {
+app.post("/push/add-token", (req, res) => {
   const data = {
     token: req.body.pushToken,
     platform: req.body.platform,
