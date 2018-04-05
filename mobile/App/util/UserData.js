@@ -77,7 +77,7 @@ export class Provider extends React.Component {
       if (token) {
         this.setState({ pushEnabled: true });
         return fetch(`${ENDPOINT}/push/add-token`, {
-          method: "PUT",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
