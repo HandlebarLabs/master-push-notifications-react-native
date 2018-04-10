@@ -12,6 +12,7 @@ const defaultState = {
   correctAnswered: 0,
   answers: {},
   pushEnabled: false,
+  notificationHistory: [],
 };
 
 const UserContext = React.createContext(defaultState);
