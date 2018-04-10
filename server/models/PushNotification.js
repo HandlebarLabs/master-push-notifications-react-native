@@ -24,7 +24,8 @@ const addPushToken = ({ token, platform, timezoneOffset }) => {
     });
 };
 
-const sendNewNotificationToAll = ({ questions, nextQuestionTime }) => {
+const sendNewNotificationToAll = notification => {
+  const { questions, nextQuestionTime } = notification.data;
   const expo = new Expo();
 
   return db

@@ -21,6 +21,14 @@ exports.up = function(knex, Promise) {
     })
   );
 
+  chain.push(
+    knex.schema.createTable("notifications", table => {
+      table.increments("_id");
+      table.timestamp("createdAt").defaultTo(knex.fn.now());
+      table.text("data");
+    })
+  );
+
   return Promise.all(chain);
 };
 
