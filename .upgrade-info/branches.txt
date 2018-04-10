@@ -8,6 +8,7 @@ push-displaying-notification
 push-updating-badge
 push-preload-content
 push-notification-history-screen
+push-persisting-sent-notifications
 push-notification-history
 push-link-to-settings
 push-handling-in-app-notifications
