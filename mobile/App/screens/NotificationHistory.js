@@ -9,6 +9,10 @@ import HistoryRow from "../components/HistoryRow";
 import * as UserData from "../util/UserData";
 
 class NotificationHistory extends React.Component {
+  componentDidMount() {
+    this.props.user.getNotificationHistory().catch(err => console.log("err getting history", err));
+  }
+
   render() {
     return (
       <Container>
