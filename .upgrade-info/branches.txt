@@ -7,6 +7,7 @@ push-requesting-permissions
 push-displaying-notification
 push-updating-badge
 push-preload-content
+push-notification-history-screen
 push-notification-history
 push-link-to-settings
 push-handling-in-app-notifications
