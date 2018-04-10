@@ -2,6 +2,7 @@ master
 server-capturing-tokens
 server-storing-push-tokens
 server-sending-bulk-messages
+push-enable-push-screen
 push-requesting-permissions
 push-displaying-notification
 push-updating-badge
