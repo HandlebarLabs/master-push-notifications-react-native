@@ -26,7 +26,7 @@ const createNewQuestionJob = () => {
 //     questions,
 //     nextQuestionTime: njob.nextInvocation()
 //   }).then(notification => {
-//     PushNotification.sendNewNotificationToAll(notification);
+//     return PushNotification.sendNewNotificationToAll(notification);
 //   });
 // });
 
