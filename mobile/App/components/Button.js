@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, TouchableHighlight, Text, TouchableOpacity } from "react-native";
+import { Quicksand } from "../util/fonts";
 
 export const PrimaryButton = ({
   onPress = () => null, children, _isHorizontal, align,
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#5AADC1",
-    fontFamily: "quicksand-bold",
+    fontFamily: Quicksand.Bold,
     fontSize: 20,
     lineHeight: 25,
     textAlign: "center",
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   secondaryTextNoBorder: {
-    fontFamily: "quicksand-regular",
+    fontFamily: Quicksand.Regular,
   },
   horizontal: {
     flexDirection: "row",

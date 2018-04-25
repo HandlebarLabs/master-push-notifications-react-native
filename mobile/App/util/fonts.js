@@ -1,9 +1,13 @@
-import { Font } from "expo";
+import { Platform } from "react-native";
 
-export const loadFonts = () =>
-  Font.loadAsync({
-    "bangers-regular": require("../../assets/fonts/Bangers-Regular.ttf"),
-    "quicksand-regular": require("../../assets/fonts/Quicksand-Regular.ttf"),
-    "quicksand-light": require("../../assets/fonts/Quicksand-Light.ttf"),
-    "quicksand-bold": require("../../assets/fonts/Quicksand-Bold.ttf"),
-  });
+const isAndroid = Platform.OS === "android";
+
+export const Bangers = {
+  Regular: isAndroid ? "Bangers-Regular" : "bangers-regular",
+};
+
+export const Quicksand = {
+  Regular: isAndroid ? "Quicksand-Regular" : "quicksand-regular",
+  Light: isAndroid ? "Quicksand-Light" : "quicksand-light",
+  Bold: isAndroid ? "Quicksand-Bold" : "quicksand-bold",
+};

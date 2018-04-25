@@ -1,20 +1,33 @@
 import React from "react";
 import moment from "moment";
-import { View } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 
 import Container from "../components/Container";
 import Card from "../components/Card";
-import { H1, H2 } from "../components/Text";
-import { SecondaryButton } from "../components/Button";
+import { H1, H2, P } from "../components/Text";
+import { SecondaryButton, PrimaryButton } from "../components/Button";
 import Stats from "../components/Stats";
 
 import * as UserData from "../util/UserData";
 import * as QuestionData from "../util/QuestionData";
+import { openSettings, scheduleStatsNotification } from "../util/pushNotifications";
 
 class Waiting extends React.Component {
+  componentDidMount() {
+    scheduleStatsNotification();
+  }
+
   handleLogout = () => {
     this.props.logout();
     this.props.goTo("Welcome");
+  };
+
+  handleHistoryPress = () => {
+    this.props.goTo("NotificationHistory", {}, "vertical");
+  };
+
+  handleSettings = () => {
+    openSettings();
   };
 
   render() {
@@ -32,8 +45,16 @@ class Waiting extends React.Component {
             correct={this.props.correctAnswered}
             total={this.props.totalAnswered}
           />
+          <TouchableOpacity onPress={this.handleHistoryPress}>
+            <P bold center>
+              Notification History
+            </P>
+          </TouchableOpacity>
         </Card>
         <View>
+          {!this.props.pushEnabled && (
+            <PrimaryButton onPress={this.handleSettings}>Enable Notifications</PrimaryButton>
+          )}
           <SecondaryButton border={false} onPress={this.handleLogout}>
             Logout
           </SecondaryButton>
@@ -46,7 +67,7 @@ class Waiting extends React.Component {
 const WithUserData = props => (
   <UserData.Consumer>
     {({
- logout, totalAnswered, correctAnswered, username,
+ logout, totalAnswered, correctAnswered, username, pushEnabled,
 }) => (
   <Waiting
     {...props}
@@ -54,6 +75,7 @@ const WithUserData = props => (
     totalAnswered={totalAnswered}
     correctAnswered={correctAnswered}
     username={username}
+    pushEnabled={pushEnabled}
   />
     )}
   </UserData.Consumer>

@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text } from "react-native";
+import { Bangers, Quicksand } from "../util/fonts";
 
 export const H1 = props => <Text style={styles.title}>{props.children}</Text>;
 
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
   question: {
     fontSize: 30,
     marginBottom: 20,
-    fontFamily: "quicksand-light",
+    fontFamily: Quicksand.Light,
     color: "#4A4A4A",
   },
   answer: {
@@ -38,29 +39,29 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 25,
     color: "#4A4A4A",
-    fontFamily: "quicksand-regular",
+    fontFamily: Quicksand.Regular,
   },
   answerBold: {
-    fontFamily: "quicksand-bold",
+    fontFamily: Quicksand.Bold,
   },
   answerRow: {
     fontSize: 20,
     lineHeight: 25,
     color: "#4A4A4A",
-    fontFamily: "quicksand-light",
+    fontFamily: Quicksand.Light,
   },
   title: {
     fontSize: 40,
     lineHeight: 50,
     marginBottom: 11,
     color: "#4A4A4A",
-    fontFamily: "bangers-regular",
+    fontFamily: Bangers.Regular,
     textAlign: "center",
   },
   standard: {
     marginBottom: 10,
     fontSize: 20,
-    fontFamily: "quicksand-regular",
+    fontFamily: Quicksand.Regular,
     color: "#4A4A4A",
   },
 });

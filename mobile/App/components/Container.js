@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  SafeAreaView,
-  StatusBar,
-  View,
-  ScrollView,
-  Dimensions,
-  Platform,
-} from "react-native";
+import { StyleSheet, SafeAreaView, StatusBar, View, ScrollView, Dimensions } from "react-native";
 
 const { height } = Dimensions.get("window");
 
@@ -24,12 +16,7 @@ export default class Container extends React.Component {
   render() {
     const scrollEnabled = this.state.screenHeight > height;
     return (
-      <SafeAreaView
-        style={[
-          styles.container,
-          Platform.OS === "android" && { paddingTop: StatusBar.currentHeight },
-        ]}
-      >
+      <SafeAreaView style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#468189" />
         <ScrollView
           ref={ref => (this.scrollView = ref)}

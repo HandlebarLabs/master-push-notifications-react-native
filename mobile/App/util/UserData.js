@@ -1,5 +1,8 @@
 import React from "react";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, Platform } from "react-native";
+
+import { ENDPOINT } from "./api";
+import { registerForPushNotifications, getPushToken } from "./pushNotifications";
 
 const defaultState = {
   ready: false,
@@ -8,6 +11,8 @@ const defaultState = {
   totalAnswered: 0,
   correctAnswered: 0,
   answers: {},
+  pushEnabled: false,
+  notificationHistory: [],
 };
 
 const UserContext = React.createContext(defaultState);
@@ -39,6 +44,17 @@ export class Provider extends React.Component {
     this.setState({ username });
   };
 
+  getNotificationHistory = () =>
+    getPushToken()
+      .then(token => fetch(`${ENDPOINT}/push/history/${token}`))
+      .then(res => res.json())
+      .then(({ data }) => {
+        data.sort((a, b) => new Date(a.createdAt) > new Date(b.createdAt));
+        this.setState({
+          notificationHistory: data,
+        });
+      });
+
   answerQuestion = (question, answer) => {
     this.setState(state => ({
       answers: {
@@ -56,6 +72,28 @@ export class Provider extends React.Component {
     this.setState({ ...defaultState, ready: true });
   };
 
+  storePushToken = (token) => {
+    if (token) {
+      this.setState({ pushEnabled: true });
+      return fetch(`${ENDPOINT}/push/add-token`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          pushToken: token,
+          platform: Platform.OS,
+          timezoneOffset: new Date().getTimezoneOffset(),
+        }),
+      });
+    }
+
+    this.setState({ pushEnabled: false });
+    return Promise.resolve();
+  };
+
+  enablePushNotifications = () => registerForPushNotifications();
+
   render() {
     return (
       <UserContext.Provider
@@ -65,6 +103,9 @@ export class Provider extends React.Component {
           completeOnboarding: this.completeOnboarding,
           setUsername: this.setUsername,
           answerQuestion: this.answerQuestion,
+          enablePushNotifications: this.enablePushNotifications,
+          getNotificationHistory: this.getNotificationHistory,
+          storePushToken: this.storePushToken,
         }}
       >
         {this.props.children}
